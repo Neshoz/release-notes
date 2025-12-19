@@ -39,14 +39,14 @@ EXAMPLES:
     # Generate notes for current branch (auto-detects version from branch name)
     $(basename "$0")
     
-    # Generate notes for v-1.2.3 branch
-    $(basename "$0") -h v-1.2.3
+    # Generate notes for release-1.2.3 branch
+    $(basename "$0") -h release-1.2.3
     
     # Specify version explicitly
-    $(basename "$0") -v 2.0.0 -b main -h release-branch
+    $(basename "$0") -v 2.0.0 -b development -h release-branch
     
     # Generate notes with authors and grouping
-    $(basename "$0") -h v-1.2.3 -a -g
+    $(basename "$0") -h release-1.2.3 -a -g
 
 EOF
 }
@@ -109,14 +109,14 @@ fi
 
 # Auto-detect version from branch name if not provided
 if [ -z "$VERSION" ]; then
-    # Try to extract version from HEAD_REF (e.g., v-1.2.3 -> 1.2.3)
-    if [[ "$HEAD_REF" =~ ^v-([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+    # Try to extract version from HEAD_REF (e.g., release-1.2.3 -> 1.2.3)
+    if [[ "$HEAD_REF" =~ ^release-([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
         VERSION="${BASH_REMATCH[1]}"
         echo -e "${GREEN}Auto-detected version: $VERSION${NC}"
     elif [ "$HEAD_REF" = "HEAD" ]; then
         # If HEAD, try to get current branch name
         CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-        if [[ "$CURRENT_BRANCH" =~ ^v-([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+        if [[ "$CURRENT_BRANCH" =~ ^release-([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
             VERSION="${BASH_REMATCH[1]}"
             echo -e "${GREEN}Auto-detected version from current branch: $VERSION${NC}"
         fi
